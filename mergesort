@@ -1,65 +1,54 @@
 #include <stdio.h>
-void merge(int low, int mid, int high, int a[], int b[]) 
-{
-    int h = low;
-    int i = low;
-    int j = mid + 1;
+#include <stdlib.h>
+#include <string.h>
 
-    while ((h <= mid) && (j <= high)) {
-        if (a[h] <= a[j]) {
-            b[i] = a[h];
-            h++;
-        } else {
-            b[i] = a[j];
-            j++;
-        }
-        i++;
-    }
-
-    while (h <= mid) {
-        b[i] = a[h];
-        h++;
-        i++;
-    }
-
-    while (j <= high) {
-        b[i] = a[j];
-        j++;
-        i++;
-    }
-
-    for (int k = low; k <= high; k++) {
-        a[k] = b[k];
-    }
+void swap(char *a, char *b) {
+    char temp[50];
+    strcpy(temp, a);
+    strcpy(a, b);
+    strcpy(b, temp);
 }
 
-void mergeSort(int low, int high, int a[], int b[]) {
+int partition(char names[][50], int low, int high) {
+    char pivot[50];
+    strcpy(pivot, names[high]);
+    int i = (low - 1);
+
+    for (int j = low; j < high; j++) {
+        if (strcmp(names[j], pivot) < 0) {
+            i++;
+            swap(names[i], names[j]);
+        }
+    }
+    swap(names[i + 1], names[high]);
+    return (i + 1);
+}
+
+void quick_sort(char names[][50], int low, int high) {
     if (low < high) {
-        int mid = (low + high) / 2;
-        mergeSort(low, mid, a, b);
-        mergeSort(mid + 1, high, a, b);
-        merge(low, mid, high, a, b);
+        int pivot_index = partition(names, low, high);
+        quick_sort(names, low, pivot_index - 1);
+        quick_sort(names, pivot_index + 1, high);
     }
 }
 
 int main() {
-    int n = 8; // Number of elements in the array
+    printf("Enter the number of names: ");
+    int n;
+    scanf("%d", &n);
 
-    int a[8] = {12, 11, 13, 5, 6, 7, 8, 10};
-    int b[8]; // Auxiliary array for merging
-
-    printf("Original array: ");
+    char names[n][50];
+    printf("Enter the names:\n");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        scanf("%s", names[i]);
     }
 
-    mergeSort(0, n - 1, a, b);
+    quick_sort(names, 0, n - 1);
 
-    printf("\nSorted array: ");
+    printf("Sorted names:\n");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        printf("%s\n", names[i]);
     }
-    printf("\n");
 
     return 0;
 }
