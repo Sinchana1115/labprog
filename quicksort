@@ -1,62 +1,69 @@
+// C Program for Quick Sort
 #include <stdio.h>
 
-void interchange(int a[], int I, int j) {
-    int p = a[I];
-    a[I] = a[j];
-    a[j] = p;
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-int partition(int a[], int m, int p) {
-    int v = a[m];
-    int I = m;
-    int j = p;
+int partition(int arr[], int s, int e) {
+    int pivot = arr[e];
+    int pIndex = s;
 
-    while (1) {
-        while (a[I] < v) {
-            I++;
+    for (int i = s; i < e; i++) {
+        if (arr[i] <= pivot) {
+            swap(&arr[i], &arr[pIndex]);
+            pIndex++;
         }
-        while (a[j] > v) {
-            j--;
-        }
-
-        if (I >= j) {
-            break;
-        }
-
-        interchange(a, I, j);
     }
-
-    a[m] = a[j];
-    a[j] = v;
-
-    return j;
+    swap(&arr[e], &arr[pIndex]);
+    return pIndex;
 }
 
-void quickSort(int a[], int m, int p) {
-    if (m < p) {
-        int q = partition(a, m, p);
-        quickSort(a, m, q - 1);
-        quickSort(a, q + 1, p);
+void quickSort(int arr[], int s, int e) {
+    if (s < e) {
+        int p = partition(arr, s, e);
+        quickSort(arr, s, p - 1);
+        quickSort(arr, p + 1, e);
     }
 }
 
 int main() {
-    int n = 8; // Number of elements in the array
+    int n;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
 
-    int a[8] = {12, 11, 13, 5, 6, 7, 8, 10};
+    int arr[n];
+    printf("Enter %d elements: ", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
 
     printf("Original array: ");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        printf("%d ", arr[i]);
     }
+    printf("\n");
 
-    quickSort(a, 0, n - 1);
+    quickSort(arr, 0, n - 1);
 
-    printf("\nSorted array: ");
+    printf("Sorted array: ");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        printf("%d ", arr[i]);
     }
     printf("\n");
 
     return 0;
 }
+
+ALGORITHM:
+QUICKSORT (array A, start, end)     
+{  
+ 1 if (start < end)     
+ 2 {  
+3 p = partition(A, start, end)  
+4 QUICKSORT (A, start, p - 1)    
+5 QUICKSORT (A, p + 1, end)    
+6 }   
+}  
