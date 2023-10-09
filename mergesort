@@ -1,65 +1,69 @@
+// C Pogram for Merge Sort
 #include <stdio.h>
-void merge(int low, int mid, int high, int a[], int b[]) 
-{
-    int h = low;
-    int i = low;
-    int j = mid + 1;
 
-    while ((h <= mid) && (j <= high)) {
-        if (a[h] <= a[j]) {
-            b[i] = a[h];
-            h++;
-        } else {
-            b[i] = a[j];
-            j++;
-        }
-        i++;
+void merge(int arr[], int l, int m, int r) {
+    int i = l, j = m + 1, k = l;
+    int temp[r - l + 1];
+
+    while (i <= m && j <= r) {
+        if (arr[i] <= arr[j])
+            temp[k++] = arr[i++];
+        else
+            temp[k++] = arr[j++];
     }
 
-    while (h <= mid) {
-        b[i] = a[h];
-        h++;
-        i++;
-    }
+    while (i <= m)
+        temp[k++] = arr[i++];
 
-    while (j <= high) {
-        b[i] = a[j];
-        j++;
-        i++;
-    }
+    while (j <= r)
+        temp[k++] = arr[j++];
 
-    for (int k = low; k <= high; k++) {
-        a[k] = b[k];
-    }
+    for (int p = l; p <= r; p++)
+        arr[p] = temp[p];
 }
 
-void mergeSort(int low, int high, int a[], int b[]) {
-    if (low < high) {
-        int mid = (low + high) / 2;
-        mergeSort(low, mid, a, b);
-        mergeSort(mid + 1, high, a, b);
-        merge(low, mid, high, a, b);
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = (l + r) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
     }
 }
 
 int main() {
-    int n = 8; // Number of elements in the array
+    int n;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
 
-    int a[8] = {12, 11, 13, 5, 6, 7, 8, 10};
-    int b[8]; // Auxiliary array for merging
-
-    printf("Original array: ");
+    int arr[n];
+    printf("Enter the elements of the array:\n");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        scanf("%d", &arr[i]);
     }
 
-    mergeSort(0, n - 1, a, b);
-
-    printf("\nSorted array: ");
+    printf("Original Array: ");
     for (int i = 0; i < n; i++) {
-        printf("%d ", a[i]);
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    mergeSort(arr, 0, n - 1);
+
+    printf("Sorted Array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
     }
     printf("\n");
 
     return 0;
 }
+
+ALGORITHM:
+MergeSort(A, p, r):
+    if p > r 
+        return
+    q = (p+r)/2
+    mergeSort(A, p, q)
+    mergeSort(A, q+1, r)
+    merge(A, p, q, r)
